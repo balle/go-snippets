@@ -37,10 +37,10 @@ func main() {
 		)
 
 		rows.Scan(&id, &name, &price, &description)
-		fmt.Printf("%d %s %f %s", id, name, price, description)
+		fmt.Printf("Got %d %s %f %s\n", id, name, price, description)
 	}
 
-	stmt, _ := db.Prepare("INSERT INTO products(name, price, description) VALUES($1, $2, $3)")
+	stmt, _ := db.Prepare("INSERT INTO products(name, price, description) VALUES(?, ?, ?)")
 
 	transaction, _ := db.Begin()
 
