@@ -10,6 +10,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/hello", hello)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/hello", hello)
 	http.ListenAndServe(":8888", nil)
 }
