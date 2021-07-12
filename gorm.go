@@ -18,14 +18,15 @@ import (
 
 type Category struct {
 	gorm.Model
-	Name string
+	Name      string
+	ProductID uint
 }
 
 type Product struct {
 	gorm.Model
 	Name       string
 	CategoryID int
-	Category   Category
+	Categories []Category
 	Price      uint
 }
 
@@ -42,8 +43,8 @@ func main() {
 	category := Category{Name: "Toy"}
 	db.Create(&category)
 	db.Create(&Product{Name: "Super Mario",
-		Category: category,
-		Price:    42})
+		Categories: []Category{category},
+		Price:      42})
 
 	// Read
 	var product Product
