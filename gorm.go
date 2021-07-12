@@ -10,6 +10,8 @@ for an exiting database
 */
 
 import (
+	"fmt"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -47,6 +49,13 @@ func main() {
 	var product Product
 	db.First(&product, 1)                         // find product with integer primary key
 	db.First(&product, "name = ?", "Super Mario") // find product with code D42
+
+	var products []Product
+	db.Find(&products)
+
+	for _, product := range products {
+		fmt.Printf("%v\n", product)
+	}
 
 	// Update - update product's price to 200
 	db.Model(&product).Update("Price", 200)
