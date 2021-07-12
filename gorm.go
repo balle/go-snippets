@@ -25,7 +25,6 @@ type Category struct {
 type Product struct {
 	gorm.Model
 	Name       string
-	CategoryID int
 	Categories []Category
 	Price      uint
 }
