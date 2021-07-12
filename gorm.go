@@ -14,10 +14,17 @@ import (
 	"gorm.io/gorm"
 )
 
+type Category struct {
+	gorm.Model
+	Name string
+}
+
 type Product struct {
 	gorm.Model
-	Code  string
-	Price uint
+	Name       string
+	CategoryID int
+	Category   Category
+	Price      uint
 }
 
 func main() {
@@ -27,21 +34,24 @@ func main() {
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&Product{})
+	db.AutoMigrate(&Product{}, &Category{})
 
 	// Create
-	db.Create(&Product{Code: "D42", Price: 100})
+	category := Category{Name: "Toy"}
+	db.Create(&category)
+	db.Create(&Product{Name: "Super Mario",
+		Category: category,
+		Price:    42})
 
 	// Read
 	var product Product
-	db.First(&product, 1)                 // find product with integer primary key
-	db.First(&product, "code = ?", "D42") // find product with code D42
+	db.First(&product, 1)                         // find product with integer primary key
+	db.First(&product, "name = ?", "Super Mario") // find product with code D42
 
 	// Update - update product's price to 200
 	db.Model(&product).Update("Price", 200)
 	// Update - update multiple fields
-	db.Model(&product).Updates(Product{Price: 200, Code: "F42"}) // non-zero fields
-	db.Model(&product).Updates(map[string]interface{}{"Price": 200, "Code": "F42"})
+	db.Model(&product).Updates(Product{Price: 200, Name: "Super Metroid"}) // non-zero fields
 
 	// Delete - delete product
 	db.Delete(&product, 1)
